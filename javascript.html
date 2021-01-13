@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function celkemAktualne() {
+            cena = parseInt(roletka.krmivo.value);
+            mnozstvi = parseInt(zadaneMnozstvi.kg.value);
+            akt = cena * mnozstvi;
+            ceAkt.celkem.value = akt;
+        }
+
+        function zatrhnuti() {
+            text1 = document.vyberDoplnku.doplnek1.checked;
+            text2 = document.vyberDoplnku.doplnek2.checked;
+            text3 = document.vyberDoplnku.doplnek3.checked;
+            text4 = document.vyberDoplnku.doplnek4.checked;
+            if (text1)
+                poDoplnku1 = akt * 0.3;
+            else
+                poDoplnku1 = 0;
+            if (text2)
+                poDoplnku2 = akt * 0.5;
+            else
+                poDoplnku2 = 0;
+            if (text3)
+                poDoplnku3 = akt * 0.15;
+            else
+                poDoplnku3 = 0;
+            if (text4)
+                poDoplnku4 = 500;
+            else
+                poDoplnku4 = 0;
+            celkemBezPosty = akt + poDoplnku1 + poDoplnku2 - poDoplnku3 + poDoplnku4;
+            //document.getElementById("zkouska").innerText=celkemBezPosty;
+        }
+
+        function konecnaCena() {
+            prvniPosta = document.typDopravy.doprava[0].checked;
+            druhaPosta = document.typDopravy.doprava[1].checked;
+            tretiPosta = document.typDopravy.doprava[2].checked;
+            if (prvniPosta) {
+                naZaver = celkemBezPosty;
+                document.konec.celkemKomplet.value = naZaver;
+            }
+            else if (druhaPosta) {
+                naZaver = celkemBezPosty * 1.1;
+                document.konec.celkemKomplet.value = naZaver;
+            }
+            else {
+                naZaver = celkemBezPosty + 250;
+                document.konec.celkemKomplet.value = naZaver;
+            }
+        }
+
+        function porovnaniPlatby() {
+            suma1 = naZaver;
+            suma2 = parseInt(kDispozici.mame.value);
+            if (suma1 <= suma2)
+                document.getElementById("platba").innerText = "Do ceny objednávky se vejdete."
+            else
+                document.getElementById("platba").innerText = "Do ceny objednávky se nevejdete."
+        }
+
+        function jenTextCisla() {
+            with (event) {
+                znak1 = (keyCode > 32 && keyCode < 48);
+                znak2 = (keyCode > 57 && keyCode < 65);
+                znak3 = (keyCode > 90 && keyCode < 97);
+                znak4 = (keyCode > 122 && keyCode < 127);
+                if (znak1 || znak2 || znak3 || znak4) returnValue = false;
+            }
+        }
+    </script>
+
+</head>
+
+<body bgcolor="#f4f794">
+    <h1>Objednávka</h1>
+    <form name="roletka">
+        <select name="krmivo" size="4">
+            <option class="zradlo" id="psiZradlo" value=150>Psí Žrádlo 150Kč/kg </option>
+            <option class="zradlo" id="kociciZradlo" value=120>Kočičí žrádlo 120Kč/kg </option>
+            <option class="zradlo" id="rybiZradlo" value=50>Žrádlo pro rybičky 50Kč/kg </option>
+            <option class="zradlo" id="tygriZradlo" value=800>Žrádlo pro tygra 800Kč/kg </option>
+        </select>
+    </form>
+    
+    <h3>Zadejte množství</h3>
+    <form name="zadaneMnozstvi">
+        <input type="text" name="kg" id="kg"><br />
+    </form>
+    
+    
+    <h3>Celkem aktuálně</h3>
+    <form name="ceAkt">
+        <input type="text" name="celkem" id="celkemAkt" onClick="celkemAktualne();"><br />
+    </form>
+    
+    <h3>Výběr doplňků</h3>
+    <form name="vyberDoplnku">
+        <input type="checkbox" name="doplnek1" class="doplnky" onClick="zatrhnuti();">Bio kvalita (+30 procent ze
+        základní ceny)<br />
+        <input type="checkbox" name="doplnek2" class="doplnky" onClick="zatrhnuti();">Extra premium kvalita (+50 procent
+        ze základní ceny)<br />
+        <input type="checkbox" name="doplnek3" class="doplnky" onClick="zatrhnuti();">Extra nekvalita pro chudé (-15
+        procent ze základní ceny)<br />
+        <input type="checkbox" name="doplnek4" class="doplnky" onClick="zatrhnuti();">Dárkové balení (+500kč)<br />
+    </form>
+
+    <h3>Doprava</h3>
+    <form name="typDopravy" onClick="konecnaCena();">
+        <input type="radio" name="doprava">Osobní odběr (bez příplatku)<br />
+        <input type="radio" name="doprava">Firemní kurýr (+10 procent z aktuální ceny krmiva)<br />
+        <input type="radio" name="doprava">Česká pošta (+250Kč)<br />
+        <input type="reset" value="Resetuj">
+    </form>
+    <h3>Celkem po všem</h3>
+    <form name="konec">
+        <input type="text" name="celkemKomplet2" id="celkemKomplet"><br />
+    </form>
+    <h3>Zadejte kolik máte celkem k útratě</h3>
+    <form name="kDispozici">
+        <input type="text" name="mame" id="mame"><br />
+    </form>
+    <button id="rozhodnuti" onClick="porovnaniPlatby();">Vejdete se do ceny?</button>
+    <p id="platba"></p>
+    <h3>Zadejte email (může obsahovat pouze písmena a čísla)</h3>
+    Jméno:<input type="text" size="39" onKeyPress="jenTextCisla();">@gmail.com
+
+</body>
+
+</html>
